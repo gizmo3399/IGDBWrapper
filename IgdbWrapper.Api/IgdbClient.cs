@@ -1,6 +1,7 @@
 ﻿using IgdbWrapper.Api.Abstractions;
 using IgdbWrapper.Api.Dto;
 using IgdbWrapper.Api.Exceptions;
+using IgdbWrapper.Api.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace IgdbWrapper.Api
     {
         private bool _isInitialized;
         private HttpClient _httpClient;
+        private JsonSerializerSettings _jsonSerializerSettings;
 
         public void Initialize(string apiKey)
         {
@@ -29,6 +31,11 @@ namespace IgdbWrapper.Api
             _httpClient.DefaultRequestHeaders.Add("user-key", apiKey);
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             _isInitialized = true;
+
+            //Set-up JSON.NET serializer.
+            _jsonSerializerSettings = new JsonSerializerSettings();
+            _jsonSerializerSettings.Converters.Add(new MillisecondEpochConverter()); //Convert IGDB's Unix timestamps to DateTime objects.
+            _jsonSerializerSettings.Formatting = Formatting.Indented;
         }
 
         //TODO Allow LINQ style building of queries and filters.
@@ -41,13 +48,43 @@ namespace IgdbWrapper.Api
 
         public async Task<IEnumerable<GameDto>> GetGamesByNameAsync(string gameName)
         {
-            var requestUrl = $"{Endpoints.GameEndpoint}/?fields=*&search={gameName}";
+            var requestUrl = $"{Endpoints.GameEndpoint}?fields=*&search={gameName}";
             var result = await _httpClient.GetAsync(requestUrl);
             if (!result.IsSuccessStatusCode)
                 throw new ApiException($"Could not fetch games because the request returned: {result.StatusCode} with reason: {result.ReasonPhrase}");
 
             var json = await result.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<IEnumerable<GameDto>>(json);
+            var games = JsonConvert.DeserializeObject<IEnumerable<GameDto>>(json, _jsonSerializerSettings);
+            await GetExtraGameInformation(games);
+            return games;
+        }
+
+        public async Task<CompanyDto> GetCompanyById(long id)
+        {
+            var requestUrl = $"{Endpoints.CompanyEndpoint}{id}?fields=*";
+            var result = await _httpClient.GetAsync(requestUrl);
+            if (!result.IsSuccessStatusCode)
+                throw new ApiException($"Could not fetch company because the request returned: {result.StatusCode} with reason: {result.ReasonPhrase}");
+
+            var json = await result.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<CompanyDto>>(json, _jsonSerializerSettings).FirstOrDefault();
+        }
+
+        private async Task GetExtraGameInformation(IEnumerable<GameDto> games)
+        {
+            foreach (var game in games)
+            {
+                //TODO find a more elegant way of loading related data.
+                if (game.PublisherIds != null && game.PublisherIds.Any())
+                {
+                    //Get publisher info
+                    foreach (var publisherId in game.PublisherIds)
+                    {
+                        var publisherInfo = await GetCompanyById(publisherId);
+                        game.Publishers.Add(publisherInfo);
+                    }
+                }
+            }
         }
     }
 }

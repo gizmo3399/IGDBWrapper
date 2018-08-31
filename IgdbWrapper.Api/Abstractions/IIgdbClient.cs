@@ -24,5 +24,7 @@ namespace IgdbWrapper.Api.Abstractions
         /// <param name="gameName">The name of the game to search for.</param>
         /// <returns>All of the games that were found matching the given <see cref="gameName"/>.</returns>
         Task<IEnumerable<GameDto>> GetGamesByNameAsync(string gameName);
+
+        Task<CompanyDto> GetCompanyById(long id);
     }
 }

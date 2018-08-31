@@ -1,9 +1,16 @@
-﻿namespace IgdbWrapper.Api.Dto
+﻿using Newtonsoft.Json;
+
+namespace IgdbWrapper.Api.Dto
 {
-    public class IgdbImageDto : BaseDto
+    public class IgdbImageDto
     {
-        public string Url { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        [JsonProperty("url")]
+        public string ImageUrl { get; set; }
+
+        [JsonProperty("width")]
+        public int ImageWidth { get; set; }
+
+        [JsonProperty("height")]
+        public int ImageHeight { get; set; }
     }
 }

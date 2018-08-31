@@ -22,14 +22,14 @@ namespace IgdbWrapper.Client
             Console.WriteLine($"Requesting data for game: {game}");
             try
             {
-                var gameDto = api.GetGamesByNameAsync(game).Result;
-                if (gameDto == null || !gameDto.Any())
+                var foundGames = api.GetGamesByNameAsync(game).Result.ToList();
+                if (!foundGames.Any())
                 {
                     Console.WriteLine("Could not find info for the game");
                     return;
                 }
 
-                DisplayGameInfo(gameDto.ToList());
+                DisplayGameInfo(foundGames.ToList());
             }
             catch (ApiException e)
             {
@@ -42,14 +42,14 @@ namespace IgdbWrapper.Client
             }
         }
 
-        private static void DisplayGameInfo(IEnumerable<GameDto> games)
+        private static void DisplayGameInfo(List<GameDto> games)
         {
-            Console.WriteLine($"Found {games.Count()} game(s)");
+            Console.WriteLine($"Found {games.Count} game(s)");
             Console.WriteLine("-----------------------------------------------------------");
             foreach (var game in games)
             {
-                Console.WriteLine($"Game name: {game.Name}");
-                Console.WriteLine($"Game summary: {game.Summary}");
+                Console.WriteLine($"Game name: {game.GameName}");
+                Console.WriteLine($"Game summary: {game.GameSummary}");
                 Console.WriteLine($"Game slug: {game.Slug}");
                 Console.WriteLine("-----------------------------------------------------------");
             }
