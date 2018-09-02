@@ -13,5 +13,11 @@ namespace IgdbWrapper.Api.Dto
 
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
+
+        [JsonProperty("url")]
+        public string ResourceUrl { get; set; }
+
+        [JsonProperty("slug")]
+        public string Slug { get; set; }
     }
 }

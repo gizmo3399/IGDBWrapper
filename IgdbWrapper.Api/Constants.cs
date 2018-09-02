@@ -4,5 +4,6 @@
     {
         public const string GameEndpoint = "games/";
         public const string CompanyEndpoint = "companies/";
+        public const string PlatformEndpoint = "platforms/";
     }
 }

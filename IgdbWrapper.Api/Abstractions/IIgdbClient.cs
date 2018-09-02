@@ -25,6 +25,18 @@ namespace IgdbWrapper.Api.Abstractions
         /// <returns>All of the games that were found matching the given <see cref="gameName"/>.</returns>
         Task<IEnumerable<GameDto>> GetGamesByNameAsync(string gameName);
 
+        /// <summary>
+        /// Gets a Company from the IGDB API by using it's ID.
+        /// </summary>
+        /// <param name="id">The ID of the company to find.</param>
+        /// <returns>The company that has the given <see cref="id"/>.</returns>
         Task<CompanyDto> GetCompanyById(long id);
+
+        /// <summary>
+        /// Gets a gaming platform from the IGDB API by using it's ID.
+        /// </summary>
+        /// <param name="id">The ID of the gaming platform to find.</param>
+        /// <returns>The gaming platform that has the given <see cref="id"/>.</returns>
+        Task<PlatformDto> GetPlatformById(long id);
     }
 }

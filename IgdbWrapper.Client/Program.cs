@@ -50,7 +50,7 @@ namespace IgdbWrapper.Client
             {
                 Console.WriteLine($"Game name: {game.GameName}");
                 Console.WriteLine($"Game summary: {game.GameSummary}");
-                Console.WriteLine($"Game slug: {game.Slug}");
+                Console.WriteLine($"Game status: {game.GameStatus}");
                 Console.WriteLine("-----------------------------------------------------------");
             }
         }

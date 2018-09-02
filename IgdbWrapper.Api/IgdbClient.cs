@@ -70,6 +70,17 @@ namespace IgdbWrapper.Api
             return JsonConvert.DeserializeObject<List<CompanyDto>>(json, _jsonSerializerSettings).FirstOrDefault();
         }
 
+        public async Task<PlatformDto> GetPlatformById(long id)
+        {
+            var requestUrl = $"{Endpoints.PlatformEndpoint}{id}?fields=*";
+            var result = await _httpClient.GetAsync(requestUrl);
+            if (!result.IsSuccessStatusCode)
+                throw new ApiException($"Could not fetch platform because the request returned: {result.StatusCode} with reason: {result.ReasonPhrase}");
+
+            var json = await result.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<PlatformDto>>(json, _jsonSerializerSettings).FirstOrDefault();
+        }
+
         private async Task GetExtraGameInformation(IEnumerable<GameDto> games)
         {
             foreach (var game in games)
@@ -82,6 +93,25 @@ namespace IgdbWrapper.Api
                     {
                         var publisherInfo = await GetCompanyById(publisherId);
                         game.Publishers.Add(publisherInfo);
+                    }
+                }
+                if (game.DeveloperIds != null && game.DeveloperIds.Any())
+                {
+                    //Get developer info.
+                    foreach (var developerId in game.DeveloperIds)
+                    {
+                        var developerInfo = await GetCompanyById(developerId);
+                        game.Developers.Add(developerInfo);
+                    }
+                }
+
+                if (game.PlatformIds != null && game.PlatformIds.Any())
+                {
+                    //Get platform info.
+                    foreach (var platformId in game.PlatformIds)
+                    {
+                        var platformInfo = await GetPlatformById(platformId);
+                        game.Platforms.Add(platformInfo);
                     }
                 }
             }

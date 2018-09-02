@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IgdbWrapper.Api.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -9,11 +10,12 @@ namespace IgdbWrapper.Api.Dto
         public GameDto()
         {
             Publishers = new List<CompanyDto>();
+            Developers = new List<CompanyDto>();
+            Platforms = new List<PlatformDto>();
         }
 
         [JsonProperty("name")]
         public string GameName { get; set; }
-        public string Slug { get; set; }
         [JsonProperty("url")]
         public string GameUrl { get; set; }
         [JsonProperty("summary")]
@@ -21,13 +23,13 @@ namespace IgdbWrapper.Api.Dto
         [JsonProperty("developers")]
         public long[] DeveloperIds { get; set; }
         [JsonProperty("category")]
-        public long GameCategory { get; set; }
+        public GameCategory GameCategory { get; set; }
         [JsonProperty("platforms")]
         public long[] PlatformIds { get; set; }
         [JsonProperty("status")]
-        public long GameStatus { get; set; }
+        public GameStatus GameStatus { get; set; }
         [JsonProperty("release_dates")]
-        public ReleaseDateDto[] ReleaseDateIds { get; set; }
+        public ReleaseDateDto[] ReleaseDates { get; set; }
         [JsonProperty("first_release_date")]
         public DateTime FirstReleaseDate { get; set; }
         [JsonProperty("rating")]
@@ -39,6 +41,8 @@ namespace IgdbWrapper.Api.Dto
         [JsonProperty("time_to_beat")]
         public TimeToBeatDto TimeToBeat { get; set; }
 
-        public virtual ICollection<CompanyDto> Publishers { get; set; }
+        public ICollection<CompanyDto> Publishers { get; set; }
+        public ICollection<CompanyDto> Developers { get; set; }
+        public ICollection<PlatformDto> Platforms { get; set; }
     }
 }
