@@ -1,5 +1,6 @@
 ﻿using IgdbWrapper.Api;
 using IgdbWrapper.Api.Dto;
+using IgdbWrapper.Api.Enums;
 using IgdbWrapper.Api.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using System.Linq;
 
 namespace IgdbWrapper.Client
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var api = new IgdbClient();
             api.Initialize("471ee7d1b7b9c9aec7652fb1f2563cd5");
@@ -29,7 +30,7 @@ namespace IgdbWrapper.Client
                     return;
                 }
 
-                DisplayGameInfo(foundGames.ToList());
+                DisplayGameInfo(foundGames.ToList(), api);
             }
             catch (ApiException e)
             {
@@ -42,7 +43,7 @@ namespace IgdbWrapper.Client
             }
         }
 
-        private static void DisplayGameInfo(List<GameDto> games)
+        private static void DisplayGameInfo(List<GameDto> games, IgdbClient client)
         {
             Console.WriteLine($"Found {games.Count} game(s)");
             Console.WriteLine("-----------------------------------------------------------");
@@ -51,6 +52,7 @@ namespace IgdbWrapper.Client
                 Console.WriteLine($"Game name: {game.GameName}");
                 Console.WriteLine($"Game summary: {game.GameSummary}");
                 Console.WriteLine($"Game status: {game.GameStatus}");
+                Console.WriteLine($"Game cover URL: {client.GetFullImageUrl(game.CoverImage, ImageType.CoverBig)}");
                 Console.WriteLine("-----------------------------------------------------------");
             }
         }

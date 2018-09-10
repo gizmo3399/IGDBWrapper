@@ -12,5 +12,8 @@ namespace IgdbWrapper.Api.Dto
 
         [JsonProperty("height")]
         public int ImageHeight { get; set; }
+
+        [JsonProperty("cloudinary_id")]
+        public string ImageId { get; set; }
     }
 }

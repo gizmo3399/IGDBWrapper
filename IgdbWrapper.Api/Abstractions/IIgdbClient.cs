@@ -1,4 +1,5 @@
 ﻿using IgdbWrapper.Api.Dto;
+using IgdbWrapper.Api.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -38,5 +39,21 @@ namespace IgdbWrapper.Api.Abstractions
         /// <param name="id">The ID of the gaming platform to find.</param>
         /// <returns>The gaming platform that has the given <see cref="id"/>.</returns>
         Task<PlatformDto> GetPlatformById(long id);
+
+        /// <summary>
+        /// Gets a full URL for an image from IGDB.
+        /// </summary>
+        /// <param name="image">The image to get the full URL for.</param>
+        /// <returns>The fully qualified URL to the image that is specified.</returns>
+        string GetFullImageUrl(IgdbImageDto image);
+
+        /// <summary>
+        /// Gets a full URL for an image from IGDB in a specific size.
+        /// </summary>
+        /// <param name="image">The image to get the full URL for.</param>
+        /// <param name="imageType">As what type of image the retrieve the URL for.</param>
+        /// <param name="retinaImage">Set to <c>true</c> to get a retina (DPR 2.0) version of the image</param>
+        /// <returns>The fully qualified URL to the image that is specified.</returns>
+        string GetFullImageUrl(IgdbImageDto image, ImageType imageType, bool retinaImage = false);
     }
 }

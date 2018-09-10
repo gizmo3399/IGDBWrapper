@@ -1,5 +1,6 @@
 ﻿using IgdbWrapper.Api.Abstractions;
 using IgdbWrapper.Api.Dto;
+using IgdbWrapper.Api.Enums;
 using IgdbWrapper.Api.Exceptions;
 using IgdbWrapper.Api.Helpers;
 using Newtonsoft.Json;
@@ -54,7 +55,7 @@ namespace IgdbWrapper.Api
                 throw new ApiException($"Could not fetch games because the request returned: {result.StatusCode} with reason: {result.ReasonPhrase}");
 
             var json = await result.Content.ReadAsStringAsync();
-            var games = JsonConvert.DeserializeObject<IEnumerable<GameDto>>(json, _jsonSerializerSettings);
+            var games = JsonConvert.DeserializeObject<IList<GameDto>>(json, _jsonSerializerSettings);
             await GetExtraGameInformation(games);
             return games;
         }
@@ -79,6 +80,20 @@ namespace IgdbWrapper.Api
 
             var json = await result.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<PlatformDto>>(json, _jsonSerializerSettings).FirstOrDefault();
+        }
+
+        public string GetFullImageUrl(IgdbImageDto image)
+        {
+            return image == null
+                ? string.Empty
+                : $"https:{image.ImageUrl}";
+        }
+
+        public string GetFullImageUrl(IgdbImageDto image, ImageType imageType, bool retinaImage = false)
+        {
+            return image == null
+                ? string.Empty
+                : $"{Endpoints.BaseImageUrl}{imageType.Description()}{(retinaImage ? "_2x" : string.Empty)}/{image.ImageId}.jpg";
         }
 
         private async Task GetExtraGameInformation(IEnumerable<GameDto> games)
