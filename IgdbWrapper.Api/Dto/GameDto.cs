@@ -29,7 +29,7 @@ namespace IgdbWrapper.Api.Dto
         [JsonProperty("status")]
         public GameStatus GameStatus { get; set; }
         [JsonProperty("release_dates")]
-        public ReleaseDateDto[] ReleaseDates { get; set; }
+        public long[] ReleaseDates { get; set; }
         [JsonProperty("first_release_date")]
         public DateTime FirstReleaseDate { get; set; }
         [JsonProperty("rating")]
@@ -37,7 +37,7 @@ namespace IgdbWrapper.Api.Dto
         [JsonProperty("publishers")]
         public long[] PublisherIds { get; set; }
         [JsonProperty("cover")]
-        public IgdbImageDto CoverImage { get; set; }
+        public long CoverImage { get; set; }
         [JsonProperty("time_to_beat")]
         public TimeToBeatDto TimeToBeat { get; set; }
 

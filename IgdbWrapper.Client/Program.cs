@@ -1,6 +1,5 @@
 ﻿using IgdbWrapper.Api;
 using IgdbWrapper.Api.Dto;
-using IgdbWrapper.Api.Enums;
 using IgdbWrapper.Api.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace IgdbWrapper.Client
         public static void Main(string[] args)
         {
             var api = new IgdbClient();
-            api.Initialize("471ee7d1b7b9c9aec7652fb1f2563cd5");
+            api.Initialize("ad6c3241cdb3b1c029e4381380e419d4");
 
             Console.WriteLine("Enter a game name to request data.");
             var game = Console.ReadLine();
@@ -52,7 +51,7 @@ namespace IgdbWrapper.Client
                 Console.WriteLine($"Game name: {game.GameName}");
                 Console.WriteLine($"Game summary: {game.GameSummary}");
                 Console.WriteLine($"Game status: {game.GameStatus}");
-                Console.WriteLine($"Game cover URL: {client.GetFullImageUrl(game.CoverImage, ImageType.CoverBig)}");
+                //Console.WriteLine($"Game cover URL: {client.GetFullImageUrl(game.CoverImage, ImageType.CoverBig)}");
                 Console.WriteLine("-----------------------------------------------------------");
             }
         }

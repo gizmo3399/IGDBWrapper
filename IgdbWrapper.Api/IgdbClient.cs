@@ -25,7 +25,7 @@ namespace IgdbWrapper.Api
 
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://api-endpoint.igdb.com/")
+                BaseAddress = new Uri("https://api-v3.igdb.com/")
             };
 
             //Add default headers.
